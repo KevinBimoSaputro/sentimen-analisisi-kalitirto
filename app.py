@@ -258,25 +258,21 @@ elif st.session_state.admin_logged_in:
     # Dashboard Admin
     st.markdown('<div class="main-content">', unsafe_allow_html=True)
     
-    # Header admin dengan tombol logout
-    col1, col2 = st.columns([2, 1])
+    # Header admin dengan tombol logout di kiri
+    col1, col2 = st.columns([1, 3])
     with col1:
+        if st.button("🚪 Logout", key="admin_logout_btn"):
+            st.session_state.admin_logged_in = False
+            st.success("✅ Logout berhasil!")
+            st.rerun()
+    
+    with col2:
         st.markdown("""
         <div class="admin-panel">
             <h1>👨‍💼 Dashboard Admin</h1>
             <p>Selamat datang di panel administrasi sistem feedback Kelurahan Kalitirto</p>
         </div>
         """, unsafe_allow_html=True)
-
-    with col2:
-        if st.button("🚪 Logout", key="admin_logout_btn"):
-            st.session_state.admin_logged_in = False
-            st.success("✅ Logout berhasil!")
-            st.rerun()
-        if st.button("👤 Mode User", key="back_to_user_mode"):
-            st.session_state.show_admin_login = False
-            st.session_state.admin_logged_in = False
-            st.rerun()
     
     # Status Connection
     st.markdown("""
