@@ -381,8 +381,9 @@ else:
     </div>
     """, unsafe_allow_html=True)
     
-    # Input feedback
+    # Input feedback - langsung setelah teks penjelasan
     user_input = st.chat_input("💭 Ketik kritik dan saran Anda di sini...")
+    
     if user_input:
         try:
             prediction = predict.predict(user_input).lower()
