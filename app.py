@@ -22,17 +22,24 @@ if "show_admin_login" not in st.session_state:
 # Password admin sederhana
 ADMIN_PASSWORD = "admin123"
 
-# CSS untuk styling
+# CSS untuk styling dengan desain netral dan profesional
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
     .main-content {
-        animation: fadeIn 0.8s ease-out;
+        animation: fadeIn 0.6s ease-out;
+        background-color: #ffffff;
     }
     
     @keyframes fadeIn {
         from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(10px);
         }
         to {
             opacity: 1;
@@ -40,184 +47,288 @@ st.markdown("""
         }
     }
     
+    /* Header styling */
     .header-section {
-        padding: 0.5rem 0;
-        margin-bottom: 1rem;
-        color: #2c3e50;
+        padding: 1rem 0;
+        margin-bottom: 2rem;
         text-align: center;
+        background-color: #ffffff;
     }
     
     .header-section h1 {
         font-size: 2.5rem;
         font-weight: 700;
-        margin-bottom: 0.3rem;
-        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        color: #000000;
+        letter-spacing: -0.02em;
     }
     
     .header-section h2 {
-        font-size: 1.8rem;
-        font-weight: 500;
+        font-size: 1.5rem;
+        font-weight: 400;
         margin-bottom: 1rem;
-        color: #34495e;
+        color: #4a5568;
     }
     
     .header-section hr {
         border: none;
         height: 1px;
-        background: #dee2e6;
-        margin: 1.5rem auto;
-        width: 60%;
+        background: #e2e8f0;
+        margin: 2rem auto;
+        width: 50%;
     }
     
     .header-section h3 {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
         font-weight: 600;
-        margin-bottom: 0.8rem;
-        color: #2c3e50;
+        margin-bottom: 1rem;
+        color: #000000;
         text-align: left;
     }
     
     .header-section .support-text {
         font-size: 1rem;
-        color: #6c757d;
+        color: #718096;
         line-height: 1.6;
-        text-align: justify;
-        margin-bottom: 1rem;
+        text-align: left;
+        margin-bottom: 1.5rem;
+        max-width: 800px;
     }
     
-    .admin-panel {
-        background: #4facfe;
-        padding: 1.5rem;
-        border-radius: 15px;
-        margin-bottom: 2rem;
-        color: white;
-        box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
-    }
-    
-    .status-card {
-        background: #f8f9fa;
-        padding: 1rem;
-        border-radius: 10px;
-        border-left: 4px solid #28a745;
-        margin-bottom: 1rem;
-    }
-    
-    /* Simple login form styling */
+    /* Login form styling */
     .login-container {
-        max-width: 500px;
-        margin: 2rem auto;
-        padding: 0;
-    }
-    
-    .login-header {
-        text-align: center;
-        margin-bottom: 2rem;
+        max-width: 450px;
+        margin: 3rem auto;
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
     }
     
     .login-title {
         font-size: 2rem;
-        color: #2c3e50;
+        color: #000000;
         margin-bottom: 0.5rem;
-        font-weight: 600;
+        font-weight: 700;
+        text-align: center;
+        letter-spacing: -0.02em;
     }
     
     .login-subtitle {
-        color: #6c757d;
+        color: #718096;
         font-size: 1rem;
         margin-bottom: 2rem;
-    }
-    
-    .password-section {
-        margin-bottom: 1.5rem;
+        text-align: center;
+        font-weight: 400;
     }
     
     .password-label {
-        font-size: 1.2rem;
-        color: #2c3e50;
+        font-size: 1.1rem;
+        color: #000000;
         margin-bottom: 0.5rem;
         font-weight: 600;
+        display: block;
     }
     
     .password-description {
-        color: #6c757d;
+        color: #718096;
         font-size: 0.9rem;
         margin-bottom: 1rem;
     }
     
-    /* Custom button styling */
-    .stButton > button {
-        background-color: #4DA6FF !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 8px !important;
-        padding: 0.6rem 2rem !important;
-        font-weight: 600 !important;
-        font-size: 1rem !important;
-        transition: all 0.3s ease !important;
-    }
-    
-    .stButton > button:hover {
-        background-color: #3A7FBF !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 8px rgba(77, 166, 255, 0.3) !important;
-    }
-    
-    /* Login button styling */
-    .login-button > button {
-        background-color: #d2691e !important;
-        color: white !important;
-    }
-    
-    .login-button > button:hover {
-        background-color: #b8621a !important;
-        box-shadow: 0 4px 8px rgba(210, 105, 30, 0.3) !important;
-    }
-    
     /* Back button styling */
     .back-button {
-        border: 1px solid #dee2e6 !important;
-        background-color: white !important;
-        color: #6c757d !important;
+        background-color: #ffffff !important;
+        color: #4a5568 !important;
+        border: 1px solid #e2e8f0 !important;
         border-radius: 8px !important;
-        padding: 0.5rem 1rem !important;
+        padding: 0.75rem 1.5rem !important;
+        font-weight: 500 !important;
+        font-size: 0.95rem !important;
+        transition: all 0.2s ease !important;
         margin-bottom: 2rem !important;
     }
     
     .back-button:hover {
-        background-color: #f8f9fa !important;
-        border-color: #adb5bd !important;
+        background-color: #f7fafc !important;
+        border-color: #cbd5e0 !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
     }
     
-    /* Feedback form styling */
+    /* Form input styling */
+    .stTextInput > div > div > input {
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 1rem !important;
+        color: #000000 !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .stTextInput > div > div > input:focus {
+        border-color: #a0aec0 !important;
+        box-shadow: 0 0 0 3px rgba(160, 174, 192, 0.1) !important;
+        outline: none !important;
+    }
+    
+    .stTextArea > div > div > textarea {
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        padding: 1rem !important;
+        font-size: 1rem !important;
+        color: #000000 !important;
+        transition: all 0.2s ease !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+    
+    .stTextArea > div > div > textarea:focus {
+        border-color: #a0aec0 !important;
+        box-shadow: 0 0 0 3px rgba(160, 174, 192, 0.1) !important;
+        outline: none !important;
+    }
+    
+    /* Button styling */
+    .stButton > button {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        padding: 0.75rem 2rem !important;
+        font-weight: 500 !important;
+        font-size: 1rem !important;
+        transition: all 0.2s ease !important;
+        width: 100% !important;
+    }
+    
+    .stButton > button:hover {
+        background-color: #f7fafc !important;
+        border-color: #cbd5e0 !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Feedback form container */
     .feedback-container {
-        background-color: #f8f9fa;
-        border-radius: 10px;
-        padding: 1.5rem;
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 2rem;
         margin-bottom: 2rem;
-        border: 1px solid #e9ecef;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     }
     
+    /* Admin panel styling */
+    .admin-panel {
+        background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        color: #000000;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .admin-panel h1 {
+        color: #000000;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .admin-panel p {
+        color: #4a5568;
+        font-weight: 400;
+    }
+    
+    /* Status card */
+    .status-card {
+        background: #ffffff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid #48bb78;
+        margin-bottom: 1.5rem;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Metrics styling */
+    .metric-box-positif {
+        background: #48bb78 !important;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(72, 187, 120, 0.2);
+        margin-bottom: 1rem;
+    }
+
+    .metric-box-netral {
+        background: #ed8936 !important;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(237, 137, 54, 0.2);
+        margin-bottom: 1rem;
+    }
+
+    .metric-box-negatif {
+        background: #e53e3e !important;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(229, 62, 62, 0.2);
+        margin-bottom: 1rem;
+    }
+
+    .metric-box-total {
+        background: #4a5568 !important;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(74, 85, 104, 0.2);
+        margin-bottom: 1rem;
+    }
+
+    .metric-label {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: white !important;
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white !important;
+        margin: 0;
+    }
+    
+    /* Notification styling */
     .notification {
         position: fixed;
         top: 20px;
         right: 20px;
         z-index: 9999;
         padding: 1rem 1.5rem;
-        border-radius: 10px;
+        border-radius: 8px;
         color: white;
-        font-weight: 600;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        font-weight: 500;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         animation: slideIn 0.3s ease-out;
         max-width: 400px;
     }
     
     .notification-success {
-        background: linear-gradient(135deg, #28a745, #20c997);
+        background: #48bb78;
     }
     
     .notification-error {
-        background: linear-gradient(135deg, #dc3545, #e74c3c);
+        background: #e53e3e;
     }
     
     @keyframes slideIn {
@@ -231,64 +342,16 @@ st.markdown("""
         }
     }
     
-    .metric-box-positif {
-        background: #28a745 !important;
-        border-radius: 15px;
-        padding: 1.5rem;
-        text-align: center;
-        color: white !important;
-        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-        margin-bottom: 1rem;
-    }
-
-    .metric-box-netral {
-        background: #ffc107 !important;
-        border-radius: 15px;
-        padding: 1.5rem;
-        text-align: center;
-        color: white !important;
-        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
-        margin-bottom: 1rem;
-    }
-
-    .metric-box-negatif {
-        background: #dc3545 !important;
-        border-radius: 15px;
-        padding: 1.5rem;
-        text-align: center;
-        color: white !important;
-        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
-        margin-bottom: 1rem;
-    }
-
-    .metric-box-total {
-        background: #6c757d !important;
-        border-radius: 15px;
-        padding: 1.5rem;
-        text-align: center;
-        color: white !important;
-        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
-        margin-bottom: 1rem;
-    }
-
-    .metric-label {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: white !important;
-    }
-
-    .metric-value {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: white !important;
-        margin: 0;
-    }
-    
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
+    
+    /* Remove default Streamlit padding */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -309,23 +372,19 @@ def show_notification(message, notification_type="success"):
     </script>
     """, unsafe_allow_html=True)
 
-# Simple admin login function
+# Admin login function
 def admin_login_form():
     st.markdown("""
     <div class="login-container">
-        <div class="login-header">
-            <div class="login-title">🔒 Admin Login</div>
-            <div class="login-subtitle">Masuk untuk mengakses dashboard administrasi</div>
-        </div>
+        <div class="login-title">🔒 Admin Login</div>
+        <div class="login-subtitle">Masuk untuk mengakses dashboard administrasi</div>
     </div>
     """, unsafe_allow_html=True)
     
     with st.form("admin_login_form", clear_on_submit=True):
         st.markdown("""
-        <div class="password-section">
-            <div class="password-label">🔑 Password Admin</div>
-            <div class="password-description">Masukkan password admin</div>
-        </div>
+        <div class="password-label">🔑 Password Admin</div>
+        <div class="password-description">Masukkan password admin</div>
         """, unsafe_allow_html=True)
         
         password = st.text_input("", type="password", placeholder="Password...", label_visibility="collapsed")
@@ -347,12 +406,12 @@ def admin_login_form():
 
 # Logika tampilan berdasarkan status
 if st.session_state.show_admin_login and not st.session_state.admin_logged_in:
-    # Tombol kembali yang simple
+    # Tombol kembali
     if st.button("← Kembali ke Form Feedback", key="back_to_user"):
         st.session_state.show_admin_login = False
         st.rerun()
     
-    # Form login admin yang simple
+    # Form login admin
     admin_login_form()
 
 elif st.session_state.admin_logged_in:
@@ -493,7 +552,7 @@ else:
     
     # Form feedback dengan text area dan tombol submit
     with st.form("feedback_form", clear_on_submit=True):
-        user_input = st.text_area("Ketik kritik dan saran Anda di sini...", height=150, placeholder="Ketik kritik dan saran Anda di sini...")
+        user_input = st.text_area("", height=150, placeholder="Ketik kritik dan saran Anda di sini...", label_visibility="collapsed")
         
         col1, col2, col3 = st.columns([3, 2, 3])
         with col2:
