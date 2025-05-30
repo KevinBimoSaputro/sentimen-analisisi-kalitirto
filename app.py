@@ -11,6 +11,8 @@ st.set_page_config(
 from datetime import datetime, date, time
 import repository as repo
 import utils as utils
+
+# Import predict_text tanpa langsung load model
 import predict_text as predict
 
 # Inisialisasi session state
@@ -438,11 +440,14 @@ elif st.session_state.admin_logged_in:
             st.session_state.admin_logged_in = False
             st.rerun()
     
-    # Status Connection
-    st.markdown("""
+    # Status Connection dengan model status
+    model_status = predict.get_model_status()
+    model_indicator = "🤖 Model ML Aktif" if model_status['loaded'] else "⚠️ Model Fallback"
+    
+    st.markdown(f"""
     <div class="status-card">
         <strong>📊 Status Sistem</strong><br>
-        ✅ Database terhubung | 🎯 Akurasi Model: 85.2%
+        ✅ Database terhubung | {model_indicator} | 🎯 Akurasi: 85.2%
     </div>
     """, unsafe_allow_html=True)
     
