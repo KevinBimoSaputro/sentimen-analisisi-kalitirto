@@ -42,7 +42,7 @@ st.markdown("""
     
     .header-section {
         padding: 0.5rem 0;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         color: #2c3e50;
         text-align: center;
     }
@@ -146,20 +146,30 @@ st.markdown("""
     
     /* Custom button styling */
     .stButton > button {
-        background-color: #d2691e !important;
+        background-color: #4DA6FF !important;
         color: white !important;
         border: none !important;
         border-radius: 8px !important;
         padding: 0.6rem 2rem !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
-        width: 100% !important;
         transition: all 0.3s ease !important;
     }
     
     .stButton > button:hover {
-        background-color: #b8621a !important;
+        background-color: #3A7FBF !important;
         transform: translateY(-1px) !important;
+        box-shadow: 0 4px 8px rgba(77, 166, 255, 0.3) !important;
+    }
+    
+    /* Login button styling */
+    .login-button > button {
+        background-color: #d2691e !important;
+        color: white !important;
+    }
+    
+    .login-button > button:hover {
+        background-color: #b8621a !important;
         box-shadow: 0 4px 8px rgba(210, 105, 30, 0.3) !important;
     }
     
@@ -176,6 +186,16 @@ st.markdown("""
     .back-button:hover {
         background-color: #f8f9fa !important;
         border-color: #adb5bd !important;
+    }
+    
+    /* Feedback form styling */
+    .feedback-container {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
     
     .notification {
@@ -311,7 +331,10 @@ def admin_login_form():
         password = st.text_input("", type="password", placeholder="Password...", label_visibility="collapsed")
         
         st.markdown("<br>", unsafe_allow_html=True)
-        submit = st.form_submit_button("Masuk")
+        
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            submit = st.form_submit_button("Masuk")
         
         if submit:
             if password == ADMIN_PASSWORD:
@@ -454,6 +477,12 @@ else:
         <h1>📝 Form Kritik dan Saran</h1>
         <h2>Kalurahan Kalitirto, Kapanewon Berbah, Kabupaten Sleman</h2>
         <hr>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Container untuk form feedback
+    st.markdown("""
+    <div class="header-section">
         <h3>💬 Berikan Kritik dan Saran Anda</h3>
         <p class="support-text">
             Kami menghargai setiap masukan Anda. Silakan tuliskan kritik, saran, atau masukan di bawah ini. 
@@ -462,23 +491,25 @@ else:
     </div>
     """, unsafe_allow_html=True)
     
-    # Input feedback - langsung setelah teks penjelasan
-    user_input = st.chat_input("💭 Ketik kritik dan saran Anda di sini...")
-    
-    if user_input:
-        try:
-            prediction = predict.predict(user_input).lower()
-            data = {
-                "feedback": user_input,
-                "prediction": prediction,
-            }
-            success = repo.insert_data(data)
-            if success:
-                show_notification("🎉 Terima kasih! Feedback Anda telah tersimpan.", "success")
-            else:
-                show_notification("❌ Gagal menyimpan feedback. Silakan coba lagi.", "error")
-        except Exception as e:
-            show_notification("❌ Terjadi kesalahan. Silakan coba lagi.", "error")
+    # Form feedback dengan text area dan tombol submit
+    with st.form("feedback_form", clear_on_submit=True):
+        user_input = st.text_area("Ketik kritik dan saran Anda di sini...", height=150, placeholder="Ketik kritik dan saran Anda di sini...")
+        
+        col1, col2, col3 = st.columns([3, 2, 3])
+        with col2:
+            submit_button = st.form_submit_button("Kirim Feedback")
+        
+        if submit_button and user_input:
+            try:
+                prediction = predict.predict(user_input).lower()
+                data = {
+                    "feedback": user_input,
+                    "prediction": prediction,
+                }
+                repo.insert_data(data)
+                st.success("🎉 Terima kasih! Feedback Anda telah tersimpan.")
+            except Exception as e:
+                st.error(f"❌ Terjadi kesalahan: {e}")
     
     # Kontak
     st.markdown("""
