@@ -102,6 +102,82 @@ st.markdown("""
         margin-bottom: 1rem;
     }
     
+    /* Simple login form styling */
+    .login-container {
+        max-width: 500px;
+        margin: 2rem auto;
+        padding: 0;
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .login-title {
+        font-size: 2rem;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+    
+    .login-subtitle {
+        color: #6c757d;
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .password-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .password-label {
+        font-size: 1.2rem;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+    
+    .password-description {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Custom button styling */
+    .stButton > button {
+        background-color: #d2691e !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.6rem 2rem !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        width: 100% !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stButton > button:hover {
+        background-color: #b8621a !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 8px rgba(210, 105, 30, 0.3) !important;
+    }
+    
+    /* Back button styling */
+    .back-button {
+        border: 1px solid #dee2e6 !important;
+        background-color: white !important;
+        color: #6c757d !important;
+        border-radius: 8px !important;
+        padding: 0.5rem 1rem !important;
+        margin-bottom: 2rem !important;
+    }
+    
+    .back-button:hover {
+        background-color: #f8f9fa !important;
+        border-color: #adb5bd !important;
+    }
+    
     .notification {
         position: fixed;
         top: 20px;
@@ -213,22 +289,29 @@ def show_notification(message, notification_type="success"):
     </script>
     """, unsafe_allow_html=True)
 
-# Admin login function
+# Simple admin login function
 def admin_login_form():
     st.markdown("""
-    <div style="max-width: 400px; margin: 0 auto; padding: 2rem; background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 1.5rem;">🔒 Admin Login</h2>
-        <p style="text-align: center; color: #6c757d; margin-bottom: 2rem;">Masuk untuk mengakses dashboard administrasi</p>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="login-title">🔒 Admin Login</div>
+            <div class="login-subtitle">Masuk untuk mengakses dashboard administrasi</div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
     
     with st.form("admin_login_form", clear_on_submit=True):
-        st.markdown("### 🔑 Password Admin")
-        password = st.text_input("Masukkan password admin", type="password", placeholder="Password...")
+        st.markdown("""
+        <div class="password-section">
+            <div class="password-label">🔑 Password Admin</div>
+            <div class="password-description">Masukkan password admin</div>
+        </div>
+        """, unsafe_allow_html=True)
         
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            submit = st.form_submit_button("🚪 Masuk", use_container_width=True)
+        password = st.text_input("", type="password", placeholder="Password...", label_visibility="collapsed")
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        submit = st.form_submit_button("Masuk")
         
         if submit:
             if password == ADMIN_PASSWORD:
@@ -241,14 +324,12 @@ def admin_login_form():
 
 # Logika tampilan berdasarkan status
 if st.session_state.show_admin_login and not st.session_state.admin_logged_in:
-    # Tombol kembali
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("← Kembali ke Form Feedback", key="back_to_user", use_container_width=True):
-            st.session_state.show_admin_login = False
-            st.rerun()
+    # Tombol kembali yang simple
+    if st.button("← Kembali ke Form Feedback", key="back_to_user"):
+        st.session_state.show_admin_login = False
+        st.rerun()
     
-    st.markdown('<div style="height: 1rem;"></div>', unsafe_allow_html=True)
+    # Form login admin yang simple
     admin_login_form()
 
 elif st.session_state.admin_logged_in:
