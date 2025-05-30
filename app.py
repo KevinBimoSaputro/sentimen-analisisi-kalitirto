@@ -193,6 +193,47 @@ st.markdown("""
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
+
+    .success-notification {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10000;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 2rem 3rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-align: center;
+        animation: popIn 0.5s ease-out;
+        min-width: 400px;
+    }
+
+    @keyframes popIn {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    .feedback-form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .submit-button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -381,24 +422,51 @@ else:
     """, unsafe_allow_html=True)
     
     # Form feedback dengan text area dan tombol submit
-    with st.form("feedback_form", clear_on_submit=True):
-        user_input = st.text_area("Ketik kritik dan saran Anda di sini...", height=150, placeholder="Ketik kritik dan saran Anda di sini...")
+    with st.container():
+        st.markdown('<div class="feedback-form-container">', unsafe_allow_html=True)
         
-        col1, col2, col3 = st.columns([3, 2, 3])
-        with col2:
-            submit_button = st.form_submit_button("Kirim Feedback")
+        with st.form("feedback_form", clear_on_submit=True):
+            user_input = st.text_area(
+                "Ketik kritik dan saran Anda di sini...", 
+                height=150, 
+                placeholder="Ketik kritik dan saran Anda di sini...",
+                label_visibility="collapsed"
+            )
+            
+            # Container untuk tombol yang terpusat
+            st.markdown('<div class="submit-button-container">', unsafe_allow_html=True)
+            submit_button = st.form_submit_button("📝 Kirim Feedback", use_container_width=False)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            if submit_button and user_input:
+                try:
+                    prediction = predict.predict(user_input).lower()
+                    data = {
+                        "feedback": user_input,
+                        "prediction": prediction,
+                    }
+                    repo.insert_data(data)
+                    
+                    # Show popup notification for 6 seconds
+                    st.markdown("""
+                    <div class="success-notification" id="successNotification">
+                        🎉 Terima kasih!<br>
+                        Feedback Anda telah berhasil tersimpan dan akan membantu kami meningkatkan pelayanan.
+                    </div>
+                    <script>
+                        setTimeout(function() {
+                            var notification = document.getElementById('successNotification');
+                            if (notification) {
+                                notification.style.display = 'none';
+                            }
+                        }, 6000);
+                    </script>
+                    """, unsafe_allow_html=True)
+                    
+                except Exception as e:
+                    st.error(f"❌ Terjadi kesalahan: {e}")
         
-        if submit_button and user_input:
-            try:
-                prediction = predict.predict(user_input).lower()
-                data = {
-                    "feedback": user_input,
-                    "prediction": prediction,
-                }
-                repo.insert_data(data)
-                st.success("🎉 Terima kasih! Feedback Anda telah tersimpan.")
-            except Exception as e:
-                st.error(f"❌ Terjadi kesalahan: {e}")
+        st.markdown('</div>', unsafe_allow_html=True)
     
     # Kontak
     st.markdown("""
