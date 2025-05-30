@@ -215,29 +215,32 @@ def show_notification(message, notification_type="success"):
 
 # Simple admin login function
 def admin_login_form():
+    # Container untuk judul yang lebih rapi
     st.markdown("""
-    <div style="max-width: 400px; margin: 0 auto; padding: 2rem; background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 1.5rem;">🔒 Admin Login</h2>
-        <p style="text-align: center; color: #6c757d; margin-bottom: 2rem;">Masuk untuk mengakses dashboard administrasi</p>
+    <div style="text-align: center; margin: 2rem 0 3rem 0;">
+        <h1 style="font-size: 2.5rem; color: #2c3e50; margin-bottom: 0.5rem; font-weight: 700;">🔒 Admin Login</h1>
+        <p style="font-size: 1.1rem; color: #6c757d; margin: 0;">Masuk untuk mengakses dashboard administrasi</p>
     </div>
     """, unsafe_allow_html=True)
     
-    with st.form("admin_login_form", clear_on_submit=True):
-        st.markdown("### 🔑 Password Admin")
-        password = st.text_input("Masukkan password admin", type="password", placeholder="Password...")
-        
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            submit = st.form_submit_button("🚪 Masuk", use_container_width=True)
-        
-        if submit:
-            if password == ADMIN_PASSWORD:
-                st.session_state.admin_logged_in = True
-                st.session_state.show_admin_login = False
-                st.success("✅ Login berhasil!")
-                st.rerun()
-            else:
-                st.error("❌ Password salah!")
+    # Form dalam container yang terpisah
+    with st.container():
+        with st.form("admin_login_form", clear_on_submit=True):
+            st.markdown("### 🔑 Password Admin")
+            password = st.text_input("Masukkan password admin", type="password", placeholder="Password...")
+            
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col2:
+                submit = st.form_submit_button("🚪 Masuk", use_container_width=True)
+            
+            if submit:
+                if password == ADMIN_PASSWORD:
+                    st.session_state.admin_logged_in = True
+                    st.session_state.show_admin_login = False
+                    st.success("✅ Login berhasil!")
+                    st.rerun()
+                else:
+                    st.error("❌ Password salah!")
 
 # Logika tampilan berdasarkan status
 if st.session_state.show_admin_login and not st.session_state.admin_logged_in:
