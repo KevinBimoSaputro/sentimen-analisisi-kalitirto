@@ -258,8 +258,8 @@ elif st.session_state.admin_logged_in:
     # Dashboard Admin
     st.markdown('<div class="main-content">', unsafe_allow_html=True)
     
-    # Header admin dengan panel di kiri dan logout di kanan
-    col1, col2 = st.columns([3, 1])
+    # Header admin dengan panel yang lebih panjang dan logout mepet kanan
+    col1, col2 = st.columns([6, 1])
     with col1:
         st.markdown("""
         <div class="admin-panel">
