@@ -113,20 +113,113 @@ def train_model():
 page = st.sidebar.selectbox("Mode", ["User", "Admin Login", "Dashboard Admin"])
 
 if page == "User":
-    # Halaman form kritik dan saran
-    st.image("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-IUKTd24YUYQZz4Kl0Nd9cyKBNvQncv.png", width=0, use_column_width=False)  # Invisible image for reference
+    # Hilangkan sidebar untuk tampilan user
+    st.markdown(
+        """
+        <style>
+        [data-testid="stSidebar"] {display: none;}
+        .stApp {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .main-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        .main-header h1 {
+            margin: 0;
+            color: #1E3A8A;
+        }
+        .subtitle {
+            text-align: center;
+            color: #4B5563;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+        }
+        .divider {
+            margin: 20px 0;
+            border-top: 1px solid #E5E7EB;
+        }
+        .feedback-section {
+            background-color: #F9FAFB;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .feedback-icon {
+            color: #6B7280;
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        .contact-section {
+            margin-top: 30px;
+        }
+        .contact-header {
+            display: flex;
+            align-items: center;
+            color: #EF4444;
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        .contact-info {
+            margin-left: 20px;
+        }
+        .admin-button {
+            margin-top: 20px;
+        }
+        .chat-input {
+            background-color: #F3F4F6;
+            border-radius: 20px;
+            padding: 10px 15px;
+            border: 1px solid #E5E7EB;
+        }
+        </style>
+        """, 
+        unsafe_allow_html=True
+    )
     
-    col1, col2 = st.columns([1, 5])
-    with col2:
-        st.title("📝 Form Kritik dan Saran")
+    # Header dengan ikon
+    st.markdown(
+        """
+        <div class="main-header">
+            <span style="font-size: 2rem;">📝</span>
+            <h1>Form Kritik dan Saran</h1>
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
     
-    st.markdown("### Kalurahan Kalitirto, Kapanewon Berbah, Kabupaten Sleman")
+    # Subtitle
+    st.markdown(
+        """
+        <div class="subtitle">
+            Kalurahan Kalitirto, Kapanewon Berbah, Kabupaten Sleman
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
     
-    st.divider()
+    # Divider
+    st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     
-    st.markdown("### 💬 Berikan Kritik dan Saran Anda")
-    st.write("Kami menghargai setiap masukan Anda. Silakan tuliskan kritik, saran, atau masukan di bawah ini. Feedback Anda sangat berharga untuk meningkatkan kualitas pelayanan kami.")
+    # Bagian feedback
+    st.markdown(
+        """
+        <div class="feedback-section">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <span class="feedback-icon">💬</span>
+                <span style="font-size: 1.2rem; font-weight: bold;">Berikan Kritik dan Saran Anda</span>
+            </div>
+            <p>Kami menghargai setiap masukan Anda. Silakan tuliskan kritik, saran, atau masukan di bawah ini. Feedback Anda sangat berharga untuk meningkatkan kualitas pelayanan kami.</p>
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
     
+    # Input chat
     user_input = st.chat_input("Ketik kritik dan saran Anda di sini...")
     if user_input:
         st.toast("Terima kasih atas kritik dan saran Anda!")
@@ -140,23 +233,43 @@ if page == "User":
         except:
             st.warning("Data tidak dapat disimpan ke database. Mode demo aktif.")
     
-    st.divider()
+    # Divider
+    st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
     
-    st.markdown("### 📞 Kontak")
-    st.write("Jika ada pertanyaan mendesak, hubungi:")
+    # Bagian kontak
+    st.markdown(
+        """
+        <div class="contact-section">
+            <div class="contact-header">
+                <span>📞</span>
+                <span style="margin-left: 10px;">Kontak</span>
+            </div>
+            <p>Jika ada pertanyaan mendesak, hubungi:</p>
+            <ul class="contact-info">
+                <li style="margin-bottom: 8px;">
+                    <span style="color: #EF4444;">📍</span> <b>Alamat:</b> Jalan Tanjungtirto, Kalitirto, Berbah, Sleman, 55573
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <span style="color: #EF4444;">📞</span> <b>Telepon:</b> (0274) 4986086
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <span style="color: #3B82F6;">🌐</span> <b>Website:</b> <a href="http://www.kalitirtosid.slemankab.go.id">www.kalitirtosid.slemankab.go.id</a>
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <span style="color: #6B7280;">📧</span> <b>Email:</b> <a href="mailto:kalitirtokalurahan@gmail.com">kalitirtokalurahan@gmail.com</a>
+                </li>
+            </ul>
+        </div>
+        """, 
+        unsafe_allow_html=True
+    )
     
-    col1, col2 = st.columns(2)
+    # Tombol admin
+    col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
-        st.markdown("- 📍 **Alamat:** Jalan Tanjungtirto, Kalitirto, Berbah, Sleman, 55573")
-        st.markdown("- 📞 **Telepon:** (0274) 4986086")
-    with col2:
-        st.markdown("- 🌐 **Website:** www.kalitirtosid.slemankab.go.id")
-        st.markdown("- 📧 **Email:** kalitirtokalurahan@gmail.com")
-    
-    # Button untuk mode admin
-    if st.button("👤 Mode Admin"):
-        st.session_state.page = "Admin Login"
-        st.experimental_rerun()
+        if st.button("👤 Mode Admin", key="admin_button"):
+            st.session_state.page = "Admin Login"
+            st.experimental_rerun()
 
 elif page == "Admin Login":
     # Halaman login admin
