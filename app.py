@@ -487,6 +487,7 @@ else:
 Jika ada pertanyaan mendesak, hubungi:
 - **📍 Alamat**: Jalan Tanjungtirto, Kalitirto, Berbah, Sleman, 55573
 - **📞 Telepon**: (0274) 4986086
+- **💬 WhatsApp**: 081393764423
 - **🌐 Website**: www.kalitirtosid.slemankab.go.id
 - **✉️ Email**: kalitirtokalurahan@gmail.com
 """)
