@@ -315,11 +315,14 @@ elif st.session_state.admin_logged_in:
             st.success("✅ Logout berhasil!")
             st.rerun()
     
-    # Status Connection
-    st.markdown("""
+    # Status Connection dan Model
+    model_status = "✅ Model Aktif" if predict.model is not None and predict.vectorizer is not None else "⚠️ Model Fallback"
+    db_status = "✅ Database Terhubung" if repo.get_connection_status() else "⚠️ Database Offline"
+    
+    st.markdown(f"""
     <div class="status-card">
         <strong>📊 Status Sistem</strong><br>
-        ✅ Database terhubung | 🎯 Akurasi Model: 85.2%
+        {db_status} | {model_status} | 🎯 Sistem Berjalan Normal
     </div>
     """, unsafe_allow_html=True)
     
