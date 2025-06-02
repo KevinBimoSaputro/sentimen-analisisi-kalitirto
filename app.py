@@ -20,7 +20,7 @@ if "show_admin_login" not in st.session_state:
     st.session_state.show_admin_login = False
 
 # Password admin sederhana
-ADMIN_PASSWORD = "admin123"
+ADMIN_PASSWORD = "Kalitirto2025"
 
 # CSS untuk styling
 st.markdown("""
