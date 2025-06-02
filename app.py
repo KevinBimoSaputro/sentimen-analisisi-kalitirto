@@ -199,9 +199,8 @@ st.markdown("""
     
     .custom-notification {
         position: fixed;
-        top: 50%;
+        top: 20px;
         left: 0;
-        transform: translateY(-50%);
         z-index: 10000;
         background: #28a745;
         color: white;
