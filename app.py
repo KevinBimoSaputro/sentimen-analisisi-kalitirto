@@ -210,17 +210,12 @@ st.markdown("""
         text-align: center;
         animation: popIn 0.5s ease-out;
         min-width: 400px;
+        cursor: pointer;
+        transition: all 0.3s ease-out;
     }
 
-    @keyframes popIn {
-        from {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.8);
-        }
-        to {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
+    .success-notification:hover {
+        transform: translate(-50%, -50%) scale(1.02);
     }
 
     .feedback-form-container {
@@ -452,19 +447,33 @@ else:
                     
                     # Show popup notification for 6 seconds
                     st.markdown("""
-                    <div class="success-notification" id="successNotification">
-                        🎉 Terima kasih!<br>
-                        Feedback Anda telah berhasil tersimpan dan akan membantu kami meningkatkan pelayanan.
-                    </div>
-                    <script>
-                        setTimeout(function() {
-                            var notification = document.getElementById('successNotification');
-                            if (notification) {
-                                notification.style.display = 'none';
-                            }
-                        }, 6000);
-                    </script>
-                    """, unsafe_allow_html=True)
+<div class="success-notification" id="successNotification">
+    🎉 Terima kasih!<br>
+    Feedback Anda telah berhasil tersimpan dan akan membantu kami meningkatkan pelayanan.
+</div>
+<script>
+    // Hide notification after 6 seconds
+    setTimeout(function() {
+        var notification = document.getElementById('successNotification');
+        if (notification) {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            setTimeout(function() {
+                notification.style.display = 'none';
+            }, 300);
+        }
+    }, 6000);
+    
+    // Also hide on click
+    document.getElementById('successNotification').addEventListener('click', function() {
+        this.style.opacity = '0';
+        this.style.transform = 'translate(-50%, -50%) scale(0.8)';
+        setTimeout(function() {
+            document.getElementById('successNotification').style.display = 'none';
+        }, 300);
+    });
+</script>
+""", unsafe_allow_html=True)
                     
                 except Exception as e:
                     st.error(f"❌ Terjadi kesalahan: {e}")
