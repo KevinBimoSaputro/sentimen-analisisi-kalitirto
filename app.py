@@ -199,40 +199,44 @@ st.markdown("""
     
     .custom-notification {
         position: fixed;
-        top: 20px;
+        top: 50%;
         left: 0;
+        transform: translateY(-50%);
         z-index: 10000;
         background: #28a745;
         color: white;
-        padding: 15px 25px;
-        border-radius: 0 8px 8px 0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        font-size: 1rem;
+        padding: 25px 35px;
+        border-radius: 0 15px 15px 0;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        font-size: 1.2rem;
         font-weight: 500;
         display: flex;
         align-items: center;
         animation: slideInFromLeft 6s ease-in-out forwards;
-        max-width: 90%;
+        max-width: 500px;
+        min-width: 400px;
     }
-    
+
     .notification-icon {
-        margin-right: 12px;
-        font-size: 1.5rem;
+        margin-right: 20px;
+        font-size: 2.5rem;
     }
-    
+
     .notification-content {
         display: flex;
         flex-direction: column;
     }
-    
+
     .notification-title {
         font-weight: 700;
-        margin-bottom: 4px;
+        margin-bottom: 8px;
+        font-size: 1.4rem;
     }
-    
+
     .notification-message {
-        font-size: 0.9rem;
-        opacity: 0.9;
+        font-size: 1rem;
+        opacity: 0.95;
+        line-height: 1.4;
     }
 </style>
 """, unsafe_allow_html=True)
