@@ -229,6 +229,32 @@ st.markdown("""
         justify-content: center;
         margin-top: 1.5rem;
     }
+
+    .stAlert > div {
+        animation: slideInFromTop 0.5s ease-out, fadeOutToTop 0.5s ease-in 5.5s forwards;
+    }
+
+    @keyframes slideInFromTop {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeOutToTop {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -419,6 +445,19 @@ else:
     </div>
     """, unsafe_allow_html=True)
     
+    # Cek apakah perlu menampilkan notifikasi sukses
+    if "show_success" in st.session_state and st.session_state.show_success:
+        # Hitung berapa lama notifikasi sudah ditampilkan
+        if "success_time" in st.session_state:
+            time_diff = (datetime.now() - st.session_state.success_time).total_seconds()
+            if time_diff < 6:  # Tampilkan selama 6 detik
+                st.success("🎉 **Terima kasih!** Feedback Anda telah berhasil tersimpan dan akan membantu kami meningkatkan pelayanan.")
+            else:
+                # Hapus notifikasi setelah 6 detik
+                st.session_state.show_success = False
+                if "success_time" in st.session_state:
+                    del st.session_state.success_time
+    
     # Form feedback dengan text area dan tombol submit
     with st.container():
         st.markdown('<div class="feedback-form-container">', unsafe_allow_html=True)
@@ -445,35 +484,12 @@ else:
                     }
                     repo.insert_data(data)
                     
-                    # Show popup notification for 6 seconds
-                    st.markdown("""
-<div class="success-notification" id="successNotification">
-    🎉 Terima kasih!<br>
-    Feedback Anda telah berhasil tersimpan dan akan membantu kami meningkatkan pelayanan.
-</div>
-<script>
-    // Hide notification after 6 seconds
-    setTimeout(function() {
-        var notification = document.getElementById('successNotification');
-        if (notification) {
-            notification.style.opacity = '0';
-            notification.style.transform = 'translate(-50%, -50%) scale(0.8)';
-            setTimeout(function() {
-                notification.style.display = 'none';
-            }, 300);
-        }
-    }, 6000);
-    
-    // Also hide on click
-    document.getElementById('successNotification').addEventListener('click', function() {
-        this.style.opacity = '0';
-        this.style.transform = 'translate(-50%, -50%) scale(0.8)';
-        setTimeout(function() {
-            document.getElementById('successNotification').style.display = 'none';
-        }, 300);
-    });
-</script>
-""", unsafe_allow_html=True)
+                    # Set session state untuk menampilkan notifikasi
+                    st.session_state.show_success = True
+                    st.session_state.success_time = datetime.now()
+                    
+                    # Rerun untuk menampilkan notifikasi
+                    st.rerun()
                     
                 except Exception as e:
                     st.error(f"❌ Terjadi kesalahan: {e}")
