@@ -18,6 +18,10 @@ if "admin_logged_in" not in st.session_state:
     st.session_state.admin_logged_in = False
 if "show_admin_login" not in st.session_state:
     st.session_state.show_admin_login = False
+if "show_notification" not in st.session_state:
+    st.session_state.show_notification = False
+if "notification_time" not in st.session_state:
+    st.session_state.notification_time = None
 
 # Password admin sederhana
 ADMIN_PASSWORD = "Kalitirto2025"
@@ -102,39 +106,6 @@ st.markdown("""
         margin-bottom: 1rem;
     }
     
-    .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 9999;
-        padding: 1rem 1.5rem;
-        border-radius: 10px;
-        color: white;
-        font-weight: 600;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        animation: slideIn 0.3s ease-out;
-        max-width: 400px;
-    }
-    
-    .notification-success {
-        background: linear-gradient(135deg, #28a745, #20c997);
-    }
-    
-    .notification-error {
-        background: linear-gradient(135deg, #dc3545, #e74c3c);
-    }
-    
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
     .metric-box-positif {
         background: #28a745 !important;
         border-radius: 15px;
@@ -194,30 +165,6 @@ st.markdown("""
     footer {visibility: hidden;}
     header {visibility: hidden;}
 
-    .success-notification {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 10000;
-        background: linear-gradient(135deg, #28a745, #20c997);
-        color: white;
-        padding: 2rem 3rem;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        font-size: 1.2rem;
-        font-weight: 600;
-        text-align: center;
-        animation: popIn 0.5s ease-out;
-        min-width: 400px;
-        cursor: pointer;
-        transition: all 0.3s ease-out;
-    }
-
-    .success-notification:hover {
-        transform: translate(-50%, -50%) scale(1.02);
-    }
-
     .feedback-form-container {
         max-width: 800px;
         margin: 0 auto;
@@ -229,51 +176,66 @@ st.markdown("""
         justify-content: center;
         margin-top: 1.5rem;
     }
-
-    .stAlert > div {
-        animation: slideInFromTop 0.5s ease-out, fadeOutToTop 0.5s ease-in 5.5s forwards;
-    }
-
-    @keyframes slideInFromTop {
-        from {
+    
+    /* Custom notification styling */
+    @keyframes slideInFromLeft {
+        0% {
+            transform: translateX(-100%);
             opacity: 0;
-            transform: translateY(-20px);
         }
-        to {
+        10% {
+            transform: translateX(0);
             opacity: 1;
-            transform: translateY(0);
+        }
+        90% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(-100%);
+            opacity: 0;
         }
     }
-
-    @keyframes fadeOutToTop {
-        from {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
+    
+    .custom-notification {
+        position: fixed;
+        top: 20px;
+        left: 0;
+        z-index: 10000;
+        background: #28a745;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 0 8px 8px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        font-size: 1rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        animation: slideInFromLeft 6s ease-in-out forwards;
+        max-width: 90%;
+    }
+    
+    .notification-icon {
+        margin-right: 12px;
+        font-size: 1.5rem;
+    }
+    
+    .notification-content {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .notification-title {
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+    
+    .notification-message {
+        font-size: 0.9rem;
+        opacity: 0.9;
     }
 </style>
 """, unsafe_allow_html=True)
-
-# Function to show notification
-def show_notification(message, notification_type="success"):
-    notification_class = f"notification-{notification_type}"
-    st.markdown(f"""
-    <div class="notification {notification_class}">
-        {message}
-    </div>
-    <script>
-        setTimeout(function() {{
-            var notification = document.querySelector('.notification');
-            if (notification) {{
-                notification.style.display = 'none';
-            }}
-        }}, 3000);
-    </script>
-    """, unsafe_allow_html=True)
 
 # Simple admin login function
 def admin_login_form():
@@ -303,6 +265,27 @@ def admin_login_form():
                     st.rerun()
                 else:
                     st.error("❌ Password salah!")
+
+# Custom notification function
+def show_custom_notification():
+    if st.session_state.show_notification:
+        # Check if notification should still be shown (6 seconds)
+        if st.session_state.notification_time:
+            time_diff = (datetime.now() - st.session_state.notification_time).total_seconds()
+            if time_diff < 6:
+                st.markdown("""
+                <div class="custom-notification">
+                    <div class="notification-icon">🎉</div>
+                    <div class="notification-content">
+                        <div class="notification-title">Terima kasih!</div>
+                        <div class="notification-message">Feedback Anda telah berhasil tersimpan dan akan membantu kami meningkatkan pelayanan.</div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                # Reset notification state after 6 seconds
+                st.session_state.show_notification = False
+                st.session_state.notification_time = None
 
 # Logika tampilan berdasarkan status
 if st.session_state.show_admin_login and not st.session_state.admin_logged_in:
@@ -431,6 +414,9 @@ else:
     # Tampilan User Biasa - Form Feedback
     st.markdown('<div class="main-content">', unsafe_allow_html=True)
     
+    # Show custom notification if needed
+    show_custom_notification()
+    
     # Header
     st.markdown("""
     <div class="header-section">
@@ -444,19 +430,6 @@ else:
         </p>
     </div>
     """, unsafe_allow_html=True)
-    
-    # Cek apakah perlu menampilkan notifikasi sukses
-    if "show_success" in st.session_state and st.session_state.show_success:
-        # Hitung berapa lama notifikasi sudah ditampilkan
-        if "success_time" in st.session_state:
-            time_diff = (datetime.now() - st.session_state.success_time).total_seconds()
-            if time_diff < 6:  # Tampilkan selama 6 detik
-                st.success("🎉 **Terima kasih!** Feedback Anda telah berhasil tersimpan dan akan membantu kami meningkatkan pelayanan.")
-            else:
-                # Hapus notifikasi setelah 6 detik
-                st.session_state.show_success = False
-                if "success_time" in st.session_state:
-                    del st.session_state.success_time
     
     # Form feedback dengan text area dan tombol submit
     with st.container():
@@ -484,11 +457,11 @@ else:
                     }
                     repo.insert_data(data)
                     
-                    # Set session state untuk menampilkan notifikasi
-                    st.session_state.show_success = True
-                    st.session_state.success_time = datetime.now()
+                    # Set notification state
+                    st.session_state.show_notification = True
+                    st.session_state.notification_time = datetime.now()
                     
-                    # Rerun untuk menampilkan notifikasi
+                    # Rerun to show notification
                     st.rerun()
                     
                 except Exception as e:
